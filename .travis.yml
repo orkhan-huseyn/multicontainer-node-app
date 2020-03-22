@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t orkhanhuseynli/multicontainer-node-app -f Dockerfile.dev ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true orkhanhuseynli/multicontainer-node-app npm run test
+
+after_success:
+  - docker build -t orkhanhuseynli/multi-client ./client
+  - docker build -t orkhanhuseynli/multi-nginx ./nginx
+  - docker build -t orkhanhuseynli/multi-server ./server
+  - docker build -t orkhanhuseynli/multi-worker ./worker
+  # log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push the images to docker hub
+  - docker push orkhanhuseynli/multi-client
+  - docker push orkhanhuseynli/multi-nginx
+  - docker push orkhanhuseynli/multi-server
+  - docker push orkhanhuseynli/multi-worker
