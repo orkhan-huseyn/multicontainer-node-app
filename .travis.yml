@@ -5,6 +5,9 @@ services:
 before_install:
   - docker build -t orkhanhuseynli/multi-node-app -f ./client/Dockerfile.dev ./client
 
+notifications:
+  email: false
+
 script:
   - docker run -e CI=true orkhanhuseynli/multi-node-app npm run test
 
