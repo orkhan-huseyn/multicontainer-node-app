@@ -3,10 +3,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t orkhanhuseynli/multicontainer-node-app -f Dockerfile.dev ./client/Dockerfile.dev ./client
+  - docker build -t orkhanhuseynli/multi-node-app -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true orkhanhuseynli/multicontainer-node-app npm run test
+  - docker run -e CI=true orkhanhuseynli/multi-node-app npm run test
 
 after_success:
   - docker build -t orkhanhuseynli/multi-client ./client
